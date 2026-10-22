@@ -25,6 +25,9 @@ namespace GildedTros.App
                     continue;
                 }
 
+                //Apply quality limit before calculating the change
+                item.Quality = Math.Clamp(item.Quality, 0, 50);
+
                 var qualityDegrationFactor = 1;
                 item.SellIn--;
                 switch (item.GetItemType())
@@ -36,7 +39,7 @@ namespace GildedTros.App
                         goto case ItemType.Normal;
                     case ItemType.Normal:
                         //Double degredation when past the expiration date
-                        qualityDegrationFactor += 1 * (item.SellIn <= 0).ToInt();
+                        qualityDegrationFactor *= item.SellIn <= 0 ? 2 : 1;
                         break;
                     case ItemType.Appreciating:
                         //Subvert degration if the item increases in value over time
